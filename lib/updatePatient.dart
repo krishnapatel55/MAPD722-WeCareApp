@@ -59,6 +59,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
             title: const Text('Update Patient'),
+            foregroundColor: Colors.white,
             leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () =>
@@ -213,6 +214,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                   const SizedBox(height: 32.0),
                   Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.white, // text color
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // Do something with the form data
