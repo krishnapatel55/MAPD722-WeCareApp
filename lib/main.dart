@@ -119,14 +119,15 @@ class _MyDataListViewState extends State<MyDataListView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const PatientDetailsPage(
-                                  name: 'John Doe',
-                                  address: '123 Main St, Anytown, USA',
-                                  contactNo: '555-555-1212',
-                                  age: 42,
-                                  gender: 'Male',
-                                  department: 'Cardiology',
-                                  doctor: 'Dr. Jane Smith',
+                                builder: (context) => PatientDetailsPage(
+                                  patientID: data[index]['_id'],
+                                  name: data[index]['patient_name'],
+                                  address: data[index]['address'],
+                                  contactNo: data[index]['contact_no'],
+                                  age: data[index]['age'],
+                                  gender: data[index]['gender'],
+                                  department: data[index]['department'],
+                                  doctor: data[index]['doctor'],
                                 ),
                               ),
                             );
@@ -143,7 +144,8 @@ class _MyDataListViewState extends State<MyDataListView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ClinicalDataListView()),
+                                  builder: (context) =>
+                                      ClinicalDataListView(data[index]['_id'])),
                             );
                           },
                           child: const Icon(

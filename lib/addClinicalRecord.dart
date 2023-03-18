@@ -1,8 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_milestone_project/clinicalRecordHistory.dart';
+
+import 'constants.dart';
+
+import 'package:http/http.dart' as http;
 
 class ClinicalRecordForm extends StatefulWidget {
+  String patientID;
+
+  ClinicalRecordForm(this.patientID);
+
   @override
-  _ClinicalRecordFormState createState() => _ClinicalRecordFormState();
+  _ClinicalRecordFormState createState() => _ClinicalRecordFormState(patientID);
 }
 
 class _ClinicalRecordFormState extends State<ClinicalRecordForm> {
@@ -16,6 +27,9 @@ class _ClinicalRecordFormState extends State<ClinicalRecordForm> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
 
+  String patientID;
+  _ClinicalRecordFormState(this.patientID);
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final bloodPressure = _bloodPressureController.text;
@@ -27,34 +41,8 @@ class _ClinicalRecordFormState extends State<ClinicalRecordForm> {
           '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}';
       final time = '${_selectedTime.hour}:${_selectedTime.minute}';
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Record Summary'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('Blood Pressure: $bloodPressure'),
-                  Text('Respiratory Rate: $respiratoryRate'),
-                  Text('Blood Oxygen Level: $bloodOxygenLevel'),
-                  Text('Heartbeat Rate: $heartbeatRate'),
-                  Text('Date: $date'),
-                  Text('Time: $time'),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      sendData(patientID, "nurse_name", date, time, bloodPressure,
+          respiratoryRate, bloodOxygenLevel, heartbeatRate, "true");
     }
   }
 
@@ -259,5 +247,52 @@ class _ClinicalRecordFormState extends State<ClinicalRecordForm> {
                     ],
                   ),
                 ))));
+  }
+
+  sendData(
+      String _id,
+      String nurse_name,
+      String datetext,
+      String timetext,
+      String blood_pressue,
+      String respiratory_rate,
+      String blood_oxygen,
+      String heart_rate,
+      String critical_condition) async {
+    final url = '$urlPort/patients/$_id/tests';
+    final headers = {'Content-Type': 'application/json'};
+
+    final data = {
+      "patient_id": _id,
+      "nurse_name": nurse_name,
+      "date": datetext,
+      "time": timetext,
+      "blood_pressue": blood_pressue,
+      "respiratory_rate": respiratory_rate,
+      "blood_oxygen": blood_oxygen,
+      "heart_rate": heart_rate,
+      "critical_condition": critical_condition
+    };
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      // Data was successfully sent to the server
+
+      // Navigate to a new page and reload this page when the new page is popped
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ClinicalDataListView(_id)),
+      );
+    } else {
+      print("Error from server");
+      // There was an error sending data to the server
+    }
   }
 }

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class PatientDetailsPage extends StatelessWidget {
+  final String patientID;
   final String name;
   final String address;
   final String contactNo;
-  final int age;
+  final String age;
   final String gender;
   final String department;
   final String doctor;
 
-  const PatientDetailsPage({
+  PatientDetailsPage({
     Key? key,
+    required this.patientID,
     required this.name,
     required this.address,
     required this.contactNo,
@@ -30,71 +32,73 @@ class PatientDetailsPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              color: Colors.blue.withOpacity(0.1),
-              child: Row(
+            Card(
+              child: Column(
                 children: [
-                  const Icon(Icons.person, size: 48.0, color: Colors.orange),
-                  const SizedBox(width: 16.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ListTile(
+                    leading: const Icon(Icons.person,
+                        size: 48.0, color: Colors.orange),
+                    title: Text(
+                      name,
+                      style: const TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      '$age years, $gender',
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                  ExpansionTile(
+                    title: Text(
+                      'Department',
+                      style: const TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
                     children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        '$age years, $gender',
-                        style: const TextStyle(fontSize: 18.0),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        '$department\nDoctor: $doctor',
-                        style: const TextStyle(fontSize: 18.0),
+                      ListTile(
+                        title: Text(
+                          department,
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
+                        subtitle: Text(
+                          'Doctor: $doctor',
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16.0),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Card(
+              child: ExpansionTile(
+                title: const Text(
+                  'Contact Information',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
                 children: [
-                  const Text(
-                    'Contact Information',
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ListTile(
+                    title: const Text(
+                      'Address',
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      address,
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
                   ),
-                  const SizedBox(height: 10.0),
-                  const Text(
-                    'Address:',
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Text(
-                    address,
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  const Text(
-                    'Phone:',
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Text(
-                    contactNo,
-                    style: const TextStyle(fontSize: 16.0),
+                  ListTile(
+                    title: const Text(
+                      'Phone',
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      contactNo,
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
                   ),
                 ],
               ),

@@ -5,12 +5,20 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ClinicalDataListView extends StatefulWidget {
+  String patientID;
+
+  ClinicalDataListView(this.patientID);
+
   @override
-  _ClinicalDataListViewState createState() => _ClinicalDataListViewState();
+  _ClinicalDataListViewState createState() =>
+      _ClinicalDataListViewState(patientID);
 }
 
 class _ClinicalDataListViewState extends State<ClinicalDataListView> {
   List<dynamic> data = [];
+
+  String patientID;
+  _ClinicalDataListViewState(this.patientID);
 
   @override
   void initState() {
@@ -19,8 +27,8 @@ class _ClinicalDataListViewState extends State<ClinicalDataListView> {
   }
 
   Future<void> fetchData() async {
-    final response = await http
-        .get(Uri.parse('$urlPort/patients/640c0bf6a777018f31b917ca/tests'));
+    final response =
+        await http.get(Uri.parse('$urlPort/patients/$patientID/tests'));
     if (response.statusCode == 200) {
       setState(() {
         data = jsonDecode(response.body);
@@ -47,7 +55,7 @@ class _ClinicalDataListViewState extends State<ClinicalDataListView> {
               onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ClinicalRecordForm()),
+                        builder: (context) => ClinicalRecordForm(patientID)),
                   )),
         ],
       ),
