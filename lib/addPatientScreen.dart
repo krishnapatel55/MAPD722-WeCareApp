@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_milestone_project/constants.dart';
+import 'package:flutter_milestone_project/main.dart';
 import 'package:http/http.dart' as http;
 
 class addPatientScreen extends StatelessWidget {
@@ -268,6 +269,13 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     if (response.statusCode == 201) {
       print(response.body.toString());
       // Data was successfully sent to the server
+
+      // Navigate to a new page and reload this page when the new page is popped
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MyApp()),
+      );
     } else {
       print("Error from server");
       // There was an error sending data to the server
