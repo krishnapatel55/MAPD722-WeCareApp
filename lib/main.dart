@@ -7,6 +7,7 @@ import 'package:flutter_milestone_project/patientDetails.dart';
 import 'package:flutter_milestone_project/updatePatient.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'constants.dart' as Constants;
 
 void main() {
   runApp(MaterialApp(
@@ -59,9 +60,7 @@ class _MyDataListViewState extends State<MyDataListView> {
   }
 
   Future<void> fetchData() async {
-    final response =
-        await http.get(Uri.parse('http://10.0.0.104:8000/patients'));
-    // await http.get(Uri.parse('http://192.168.2.23:8000/patients'));
+    final response = await http.get(Uri.parse('${Constants.urlPort}/patients'));
     if (response.statusCode == 200) {
       setState(() {
         data = jsonDecode(response.body);

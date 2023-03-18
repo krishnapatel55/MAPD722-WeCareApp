@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_milestone_project/addClinicalRecord.dart';
+import 'package:flutter_milestone_project/constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -18,10 +19,8 @@ class _ClinicalDataListViewState extends State<ClinicalDataListView> {
   }
 
   Future<void> fetchData() async {
-    final response =
-        // await http.get(Uri.parse('http://10.0.0.104:8000/patients'));
-        await http.get(Uri.parse(
-            'http://192.168.2.23:8000/patients/640c0bf6a777018f31b917ca/tests'));
+    final response = await http
+        .get(Uri.parse('$urlPort/patients/640c0bf6a777018f31b917ca/tests'));
     if (response.statusCode == 200) {
       setState(() {
         data = jsonDecode(response.body);

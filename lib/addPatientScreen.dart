@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_milestone_project/constants.dart';
 import 'package:http/http.dart' as http;
 
 class addPatientScreen extends StatelessWidget {
@@ -226,13 +229,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                           String doctor = _doctorController.text;
                           String age = _ageController.text;
                           String gender = _gender!;
-                          print('Name: $name');
-                          print('Address: $address');
-                          print('Contact: $contact');
-                          print('Department: $department');
-                          print('Doctor: $doctor');
-                          print('Age: $age');
-                          print('Gender: $gender');
+
+                          sendData(name, address, contact, department, doctor,
+                              age, gender);
                         }
                       },
                       child: const Text('Submit'),
@@ -243,5 +242,35 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             ),
           ),
         ));
+  }
+
+  sendData(String name, String address, String contact, String department,
+      String doctor, String age, String gender) async {
+    const url = '$urlPort/patients';
+    final headers = {'Content-Type': 'application/json'};
+
+    final data = {
+      "patient_name": name,
+      "address": address,
+      "age": age,
+      "gender": gender,
+      "contact_no": contact,
+      "department": department,
+      "doctor": doctor,
+    };
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 201) {
+      print(response.body.toString());
+      // Data was successfully sent to the server
+    } else {
+      print("Error from server");
+      // There was an error sending data to the server
+    }
   }
 }
