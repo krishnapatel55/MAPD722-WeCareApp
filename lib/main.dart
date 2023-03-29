@@ -74,6 +74,9 @@ class MyDataListView extends StatefulWidget {
 
 class _MyDataListViewState extends State<MyDataListView> {
   List<dynamic> data = [];
+  List<dynamic> searchDataList = [];
+  bool _isSearchBarVisible = false;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -81,11 +84,33 @@ class _MyDataListViewState extends State<MyDataListView> {
     fetchData();
   }
 
+  void searchList(String searchQuery) {
+    setState(() {
+      if (searchQuery.toString().trim() != "" &&
+          searchQuery.trim().isNotEmpty) {
+        data.clear();
+
+        for (var i = 0; i < searchDataList.length; i++) {
+          if (searchDataList[i]['patient_name']
+              .toString()
+              .toLowerCase()
+              .contains(searchQuery.toLowerCase())) {
+            data.add(searchDataList[i]);
+          }
+        }
+      } else {
+        data.clear();
+        data.addAll(searchDataList);
+      }
+    });
+  }
+
   Future<void> fetchData() async {
     final response = await http.get(Uri.parse('${Constants.urlPort}/patients'));
     if (response.statusCode == 200) {
       setState(() {
         data = jsonDecode(response.body);
+        searchDataList = jsonDecode(response.body);
         print("response" + response.body);
       });
     } else {
@@ -184,6 +209,61 @@ class _MyDataListViewState extends State<MyDataListView> {
             ),
           );
         },
+      ),
+      floatingActionButton: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return ScaleTransition(
+            scale: animation,
+            child: child,
+          );
+        },
+        child: _isSearchBarVisible
+            ? Container(
+                height: kToolbarHeight,
+                margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Search',
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          searchList(value);
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        setState(() {
+                          _isSearchBarVisible = false;
+                          _searchController.clear();
+                          data.clear();
+                          data.addAll(searchDataList);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              )
+            : FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    _isSearchBarVisible = true;
+                  });
+                },
+                child: const Icon(Icons.search),
+              ),
       ),
     );
   }
