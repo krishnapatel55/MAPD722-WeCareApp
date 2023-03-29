@@ -38,6 +38,28 @@ class MyApp extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => const addPatientScreen()),
                   )),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              // Handle filter option selection
+            },
+            icon: const Icon(
+              Icons.filter_list_alt,
+              color: Colors.white,
+              size: 28,
+            ),
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                  value: 'All Patients',
+                  child: Text('All Patients'),
+                ),
+                const PopupMenuItem(
+                  value: 'Critical Patients',
+                  child: Text('Critical Patients'),
+                ),
+              ];
+            },
+          ),
         ],
       ),
       body: MyDataListView(),

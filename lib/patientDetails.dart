@@ -50,9 +50,9 @@ class PatientDetailsPage extends StatelessWidget {
                     ),
                   ),
                   ExpansionTile(
-                    title: Text(
+                    title: const Text(
                       'Department',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
                     children: [
@@ -110,21 +110,23 @@ class PatientDetailsPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () {
-                      // Implement edit functionality
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.edit),
-                    label: const Text('Edit'),
+                    label: const Text('Edit', style: TextStyle(fontSize: 17)),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                    ),
                   ),
-                  const SizedBox(width: 10.0),
+                  const SizedBox(width: 15),
                   ElevatedButton.icon(
                     onPressed: () {
                       // Implement delete functionality
                     },
                     icon: const Icon(Icons.delete),
-                    label: const Text('Delete'),
+                    label: const Text('Delete', style: TextStyle(fontSize: 17)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
                     ),
                   ),
                 ],
