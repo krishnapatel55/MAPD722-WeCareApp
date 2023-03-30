@@ -221,20 +221,25 @@ class _MyDataListViewState extends State<MyDataListView> {
         child: _isSearchBarVisible
             ? Container(
                 height: kToolbarHeight,
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                //margin: const EdgeInsets.symmetric(horizontal: 30),
+                margin: const EdgeInsets.only(left: 30),
                 decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.transparent.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(50.0),
                 ),
                 child: Row(
                   children: [
-                    const SizedBox(width: 16.0),
+                    const SizedBox(width: 18),
                     Expanded(
                       child: TextField(
                         controller: _searchController,
                         autofocus: true,
+                        cursorColor: Colors.white,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 18),
                         decoration: const InputDecoration(
                           hintText: 'Search',
+                          hintStyle: TextStyle(color: Colors.grey),
                           border: InputBorder.none,
                         ),
                         onChanged: (value) {
@@ -243,7 +248,7 @@ class _MyDataListViewState extends State<MyDataListView> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close),
+                      icon: const Icon(Icons.close, color: Colors.white),
                       onPressed: () {
                         setState(() {
                           _isSearchBarVisible = false;
@@ -262,7 +267,11 @@ class _MyDataListViewState extends State<MyDataListView> {
                     _isSearchBarVisible = true;
                   });
                 },
-                child: const Icon(Icons.search),
+                child: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: 30,
+                ),
               ),
       ),
     );
