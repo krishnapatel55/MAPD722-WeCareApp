@@ -23,45 +23,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Patients List'),
-        foregroundColor: Colors.white,
-        actions: <Widget>[
-          IconButton(
-              icon: const Icon(
-                Icons.add,
-                size: 35,
-                color: Colors.white,
-              ),
-              onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const addPatientScreen()),
-                  )),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              // Handle filter option selection
-            },
-            icon: const Icon(
-              Icons.filter_list_alt,
-              color: Colors.white,
-              size: 28,
-            ),
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem(
-                  value: 'All Patients',
-                  child: Text('All Patients'),
-                ),
-                const PopupMenuItem(
-                  value: 'Critical Patients',
-                  child: Text('Critical Patients'),
-                ),
-              ];
-            },
-          ),
-        ],
-      ),
       body: MyDataListView(),
     );
   }
@@ -84,7 +45,26 @@ class _MyDataListViewState extends State<MyDataListView> {
     fetchData();
   }
 
-  void searchList(String searchQuery) {
+  void onFilter(bool isShowCriticalPatient) {
+    setState(() {
+      if (isShowCriticalPatient) {
+        data.clear();
+        for (var i = 0; i < searchDataList.length; i++) {
+          if (searchDataList[i]['critical_condition']
+              .toString()
+              .toLowerCase()
+              .contains("true")) {
+            data.add(searchDataList[i]);
+          }
+        }
+      } else {
+        data.clear();
+        data.addAll(searchDataList);
+      }
+    });
+  }
+
+  void onSearch(String searchQuery) {
     setState(() {
       if (searchQuery.toString().trim() != "" &&
           searchQuery.trim().isNotEmpty) {
@@ -121,6 +101,50 @@ class _MyDataListViewState extends State<MyDataListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Patients List'),
+        foregroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(
+                Icons.add,
+                size: 35,
+                color: Colors.white,
+              ),
+              onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const addPatientScreen()),
+                  )),
+          PopupMenuButton<String>(
+            onSelected: (result) {
+              // Handle filter option selection
+              if (result == "Critical Patients") {
+                onFilter(true);
+              } else {
+                onFilter(false);
+              }
+            },
+            icon: const Icon(
+              Icons.filter_list_alt,
+              color: Colors.white,
+              size: 28,
+            ),
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                  value: 'All Patients',
+                  child: Text('All Patients'),
+                ),
+                const PopupMenuItem(
+                  value: 'Critical Patients',
+                  child: Text('Critical Patients'),
+                ),
+              ];
+            },
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
@@ -243,7 +267,7 @@ class _MyDataListViewState extends State<MyDataListView> {
                           border: InputBorder.none,
                         ),
                         onChanged: (value) {
-                          searchList(value);
+                          onSearch(value);
                         },
                       ),
                     ),

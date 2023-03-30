@@ -36,13 +36,27 @@ class _ClinicalRecordFormState extends State<ClinicalRecordForm> {
       final respiratoryRate = _respiratoryRateController.text;
       final bloodOxygenLevel = _bloodOxygenLevelController.text;
       final heartbeatRate = _heartbeatRateController.text;
-
+      var criticalCondition = "false";
       final date =
           '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}';
       final time = '${_selectedTime.hour}:${_selectedTime.minute}';
 
+      if (int.parse(bloodPressure) > 120 || int.parse(bloodPressure) < 80) {
+        criticalCondition = "true";
+      } else if (int.parse(respiratoryRate) < 12 ||
+          int.parse(respiratoryRate) > 16) {
+        criticalCondition = "true";
+      } else if (int.parse(bloodOxygenLevel) < 95) {
+        criticalCondition = "true";
+      } else if (int.parse(heartbeatRate) > 100 ||
+          int.parse(heartbeatRate) < 60) {
+        criticalCondition = "true";
+      } else {
+        criticalCondition = "false";
+      }
+
       sendData(patientID, "nurse_name", date, time, bloodPressure,
-          respiratoryRate, bloodOxygenLevel, heartbeatRate, "true");
+          respiratoryRate, bloodOxygenLevel, heartbeatRate, criticalCondition);
     }
   }
 
