@@ -52,11 +52,16 @@ class _ClinicalDataListViewState extends State<ClinicalDataListView> {
                 size: 35,
                 color: Colors.white,
               ),
-              onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ClinicalRecordForm(patientID)),
-                  )),
+              onPressed: () async {
+                bool refreshdata = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ClinicalRecordForm(patientID)),
+                );
+                if (refreshdata) {
+                  fetchData();
+                }
+              }),
         ],
       ),
       body: ListView.builder(

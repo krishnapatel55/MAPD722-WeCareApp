@@ -128,7 +128,7 @@ class PatientDetailsPage extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: () {
                       // Implement delete functionality
-                      deletePatient();
+                      deletePatient(context);
                     },
                     icon: const Icon(Icons.delete),
                     label: const Text('Delete', style: TextStyle(fontSize: 17)),
@@ -147,7 +147,7 @@ class PatientDetailsPage extends StatelessWidget {
   }
 
   // Delete patients by sending there id to the server.
-  void deletePatient() async {
+  void deletePatient(BuildContext context) async {
     final url = '$urlPort/patients/$patientID';
     final headers = {'Content-Type': 'application/json'};
 
@@ -164,9 +164,7 @@ class PatientDetailsPage extends StatelessWidget {
     if (response.statusCode == 200) {
       print(response.body.toString());
       // ignore: use_build_context_synchronously
-      // Navigator.pushReplacement(context,
-      //   MaterialPageRoute(builder: (context) => const MyApp()),
-      // );
+      Navigator.pop(context, true);
     } else {
       print("Error from server");
       // There was an error sending data to the server

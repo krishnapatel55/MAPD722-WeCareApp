@@ -272,10 +272,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
       // Navigate to a new page and reload this page when the new page is popped
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MyApp()),
-      );
+      Navigator.pop(context, true);
     } else {
       print("Error from server");
       // There was an error sending data to the server

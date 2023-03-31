@@ -111,11 +111,16 @@ class _MyDataListViewState extends State<MyDataListView> {
                 size: 35,
                 color: Colors.white,
               ),
-              onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const addPatientScreen()),
-                  )),
+              onPressed: () async {
+                bool refreshdata = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const addPatientScreen()),
+                );
+                if (refreshdata) {
+                  fetchData();
+                }
+              }),
           PopupMenuButton<String>(
             onSelected: (result) {
               // Handle filter option selection
@@ -186,8 +191,8 @@ class _MyDataListViewState extends State<MyDataListView> {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            bool refreshdata = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PatientDetailsPage(
@@ -202,6 +207,9 @@ class _MyDataListViewState extends State<MyDataListView> {
                                 ),
                               ),
                             );
+                            if (refreshdata) {
+                              fetchData();
+                            }
                           },
                           child: const Icon(
                             Icons.person,
