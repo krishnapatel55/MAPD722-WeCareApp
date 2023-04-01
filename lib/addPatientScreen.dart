@@ -2,51 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_milestone_project/constants.dart';
-import 'package:flutter_milestone_project/main.dart';
 import 'package:http/http.dart' as http;
 
-class addPatientScreen extends StatelessWidget {
+class addPatientScreen extends StatefulWidget {
   const addPatientScreen({super.key});
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'We Care App',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.orange,
-            textStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          contentPadding:
-              const EdgeInsets.only(left: 14.0, bottom: 12.0, top: 0.0),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.indigo),
-          ),
-        ),
-      ),
-      home: const PersonalInfoForm(title: 'Add Patient'),
-    );
-  }
-}
-
-class PersonalInfoForm extends StatefulWidget {
-  const PersonalInfoForm({super.key, required this.title});
-  final String title;
   @override
   // ignore: library_private_types_in_public_api
   _PersonalInfoFormState createState() => _PersonalInfoFormState();
 }
 
-class _PersonalInfoFormState extends State<PersonalInfoForm> {
+class _PersonalInfoFormState extends State<addPatientScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_milestone_project/AddPatientScreen.dart';
-import 'package:flutter_milestone_project/addClinicalRecord.dart';
 import 'package:flutter_milestone_project/clinicalRecordHistory.dart';
 import 'package:flutter_milestone_project/loginScreen.dart';
 import 'package:flutter_milestone_project/patientDetails.dart';
-import 'package:flutter_milestone_project/updatePatient.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'constants.dart' as Constants;
@@ -112,12 +110,12 @@ class _MyDataListViewState extends State<MyDataListView> {
                 color: Colors.white,
               ),
               onPressed: () async {
-                bool refreshdata = await Navigator.push(
+                bool? refreshdata = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const addPatientScreen()),
                 );
-                if (refreshdata) {
+                if (refreshdata != null && refreshdata) {
                   fetchData();
                 }
               }),
@@ -154,14 +152,7 @@ class _MyDataListViewState extends State<MyDataListView> {
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) =>
-              //           updatePatientScreen(data: data[index]['patient_name'])),
-              // );
-            },
+            onTap: () {},
             child: Card(
               elevation: 5.0, // Set the elevation for shadow effect
               shadowColor: Colors.grey, // Set the shadow color
@@ -192,7 +183,7 @@ class _MyDataListViewState extends State<MyDataListView> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            bool refreshdata = await Navigator.push(
+                            bool? refreshdata = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PatientDetailsPage(
@@ -207,7 +198,7 @@ class _MyDataListViewState extends State<MyDataListView> {
                                 ),
                               ),
                             );
-                            if (refreshdata) {
+                            if (refreshdata != null && refreshdata) {
                               fetchData();
                             }
                           },

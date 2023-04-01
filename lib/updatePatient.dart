@@ -1,58 +1,76 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class updatePatientScreen extends StatelessWidget {
-  final String data;
-  const updatePatientScreen({super.key, required this.data});
+import 'constants.dart';
 
-  // This widget is the root of your application.
+class updatePatientScreen extends StatefulWidget {
+  final String patientID;
+  final String name;
+  final String address;
+  final String contactNo;
+  final String age;
+  final String gender;
+  final String department;
+  final String doctor;
+
+  updatePatientScreen({
+    super.key,
+    required this.patientID,
+    required this.name,
+    required this.address,
+    required this.contactNo,
+    required this.age,
+    required this.gender,
+    required this.department,
+    required this.doctor,
+  });
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'We Care App',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.orange,
-            textStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          contentPadding:
-              const EdgeInsets.only(left: 14.0, bottom: 12.0, top: 0.0),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.indigo),
-          ),
-        ),
-      ),
-      home: const PersonalInfoForm(title: 'Add Patient'),
-    );
-  }
+  _updatePatientForm createState() => _updatePatientForm(
+      patientID, name, address, contactNo, age, gender, department, doctor);
 }
 
-class PersonalInfoForm extends StatefulWidget {
-  const PersonalInfoForm({super.key, required this.title});
-  final String title;
-  @override
-  // ignore: library_private_types_in_public_api
-  _PersonalInfoFormState createState() => _PersonalInfoFormState();
-}
+class _updatePatientForm extends State<updatePatientScreen> {
+  final String patientID;
+  final String name;
+  final String address;
+  final String contactNo;
+  final String age;
+  final String gender;
+  final String department;
+  final String doctor;
 
-class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: 'joe');
-  final _addressController = TextEditingController(text: 'Scarborough');
-  final _contactController = TextEditingController(text: '4379891586');
-  final _departmentController = TextEditingController(text: 'General');
-  final _doctorController = TextEditingController(text: 'Dr. Roy');
-  final _ageController = TextEditingController(text: '45');
+  final _nameController = TextEditingController(text: '');
+  final _addressController = TextEditingController(text: '');
+  final _contactController = TextEditingController(text: '');
+  final _departmentController = TextEditingController(text: '');
+  final _doctorController = TextEditingController(text: '');
+  final _ageController = TextEditingController(text: '');
   String? _gender = "male";
 
+  _updatePatientForm(
+    this.patientID,
+    this.name,
+    this.address,
+    this.contactNo,
+    this.age,
+    this.gender,
+    this.department,
+    this.doctor,
+  ) {
+    _nameController.text = name;
+    _addressController.text = address;
+    _contactController.text = contactNo;
+    _departmentController.text = department;
+    _doctorController.text = doctor;
+    _ageController.text = age;
+    _gender = gender.toString().toLowerCase();
+  }
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,13 +245,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                           String doctor = _doctorController.text;
                           String age = _ageController.text;
                           String gender = _gender!;
-                          print('Name: $name');
-                          print('Address: $address');
-                          print('Contact: $contact');
-                          print('Department: $department');
-                          print('Doctor: $doctor');
-                          print('Age: $age');
-                          print('Gender: $gender');
+
+                          updatePatientDataApi(name, address, contact,
+                              department, doctor, age, gender);
                         }
                       },
                       child: const Text('Submit'),
@@ -244,5 +258,39 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             ),
           ),
         ));
+  }
+
+  updatePatientDataApi(String name, String address, String contact,
+      String department, String doctor, String age, String gender) async {
+    final url = '$urlPort/patients/$patientID';
+    final headers = {'Content-Type': 'application/json'};
+
+    final data = {
+      "patient_name": name,
+      "address": address,
+      "age": age,
+      "gender": gender,
+      "contact_no": contact,
+      "department": department,
+      "doctor": doctor,
+    };
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      // Data was successfully sent to the server
+
+      // Navigate to a new page and reload this page when the new page is popped
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context, true);
+    } else {
+      print("Error from server");
+      // There was an error sending data to the server
+    }
   }
 }

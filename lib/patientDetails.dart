@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_milestone_project/main.dart';
+import 'package:flutter_milestone_project/updatePatient.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -9,13 +9,13 @@ import 'constants.dart';
 
 class PatientDetailsPage extends StatelessWidget {
   final String patientID;
-  final String name;
-  final String address;
-  final String contactNo;
-  final String age;
-  final String gender;
-  final String department;
-  final String doctor;
+  String name;
+  String address;
+  String contactNo;
+  String age;
+  String gender;
+  String department;
+  String doctor;
 
   PatientDetailsPage({
     Key? key,
@@ -117,7 +117,33 @@ class PatientDetailsPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () async {
+                      bool? result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => updatePatientScreen(
+                                  patientID: patientID,
+                                  name: name,
+                                  address: address,
+                                  contactNo: contactNo,
+                                  age: age,
+                                  gender: gender,
+                                  department: department,
+                                  doctor: doctor,
+                                )),
+                      );
+
+                      if (result != null && result) {
+                        Navigator.pop(context, true);
+                      }
+                      // name.value = result.item1 as String;
+                      // address.value = result.item2 as String;
+                      // contactNo.value = result.item3 as String;
+                      // age.value = result.item4 as String;
+                      // gender.value = result.item5 as String;
+                      // department.value = result.item6 as String;
+                      // doctor.value = result.item6 as String;
+                    },
                     icon: const Icon(Icons.edit),
                     label: const Text('Edit', style: TextStyle(fontSize: 17)),
                     style: ElevatedButton.styleFrom(
