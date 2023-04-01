@@ -148,90 +148,93 @@ class _MyDataListViewState extends State<MyDataListView> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {},
-            child: Card(
-              elevation: 5.0, // Set the elevation for shadow effect
-              shadowColor: Colors.grey, // Set the shadow color
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            data[index]['patient_name'],
-                            style: const TextStyle(fontSize: 18.0),
+      body: RefreshIndicator(
+        onRefresh: fetchData,
+        child: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {},
+              child: Card(
+                elevation: 5.0, // Set the elevation for shadow effect
+                shadowColor: Colors.grey, // Set the shadow color
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data[index]['patient_name'],
+                              style: const TextStyle(fontSize: 18.0),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              data[index]['address'],
+                              style: const TextStyle(
+                                  fontSize: 14.0, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              bool? refreshdata = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PatientDetailsPage(
+                                    patientID: data[index]['_id'],
+                                    name: data[index]['patient_name'],
+                                    address: data[index]['address'],
+                                    contactNo: data[index]['contact_no'],
+                                    age: data[index]['age'],
+                                    gender: data[index]['gender'],
+                                    department: data[index]['department'],
+                                    doctor: data[index]['doctor'],
+                                  ),
+                                ),
+                              );
+                              if (refreshdata != null && refreshdata) {
+                                fetchData();
+                              }
+                            },
+                            child: const Icon(
+                              Icons.person,
+                              size: 30,
+                              color: Colors.orange,
+                            ),
                           ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            data[index]['address'],
-                            style: const TextStyle(
-                                fontSize: 14.0, color: Colors.grey),
+                          const SizedBox(width: 20),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ClinicalDataListView(
+                                        data[index]['_id'])),
+                              );
+                            },
+                            child: const Icon(
+                              Icons.medical_services,
+                              size: 30,
+                              color: Colors.orange,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            bool? refreshdata = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PatientDetailsPage(
-                                  patientID: data[index]['_id'],
-                                  name: data[index]['patient_name'],
-                                  address: data[index]['address'],
-                                  contactNo: data[index]['contact_no'],
-                                  age: data[index]['age'],
-                                  gender: data[index]['gender'],
-                                  department: data[index]['department'],
-                                  doctor: data[index]['doctor'],
-                                ),
-                              ),
-                            );
-                            if (refreshdata != null && refreshdata) {
-                              fetchData();
-                            }
-                          },
-                          child: const Icon(
-                            Icons.person,
-                            size: 30,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ClinicalDataListView(data[index]['_id'])),
-                            );
-                          },
-                          child: const Icon(
-                            Icons.medical_services,
-                            size: 30,
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
