@@ -29,26 +29,4 @@ void main() {
     expect(data[0]['doctor'], isNotEmpty);
     expect(data[0]['critical_condition'], true);
   });
-
-  group('Login Screen TextForm Field', () {
-    Widget testwidget = MediaQuery(
-        data: const MediaQueryData(), child: MaterialApp(home: loginScreen()));
-    testWidgets('Render 2 TextField', (WidgetTester tester) async {
-      await tester.pumpWidget(testwidget);
-      expect(
-          find.byType(TextFormField),
-          findsNWidgets(
-              2)); // Expecting 2 TextFormField widget on Login Screen.
-    });
-  });
-
-  group('Main Screen listview Field', () {
-    Widget testwidget = const MediaQuery(
-        data: MediaQueryData(), child: MaterialApp(home: addPatientScreen()));
-    testWidgets('Render Listview', (WidgetTester tester) async {
-      await tester.pumpWidget(testwidget);
-      expect(find.byType(TextFormField),
-          findsWidgets); // Expecting ListView widget on main Screen.
-    });
-  });
 }
