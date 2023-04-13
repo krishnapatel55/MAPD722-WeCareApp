@@ -53,12 +53,12 @@ class _ClinicalDataListViewState extends State<ClinicalDataListView> {
                 color: Colors.white,
               ),
               onPressed: () async {
-                bool refreshdata = await Navigator.push(
+                bool? refreshdata = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => ClinicalRecordForm(patientID)),
                 );
-                if (refreshdata) {
+               if (refreshdata != null && refreshdata) {
                   fetchData();
                 }
               }),
