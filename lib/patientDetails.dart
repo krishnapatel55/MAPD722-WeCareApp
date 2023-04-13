@@ -153,8 +153,40 @@ class PatientDetailsPage extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Implement delete functionality
-                      deletePatient(context);
+                      //deletePatient(context);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'Confirm Delete',
+                              style: TextStyle(color: Colors.orange),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: const Text(
+                                'Are you sure you want to delete this patient?',
+                                style: TextStyle(fontSize: 17)),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel',
+                                    style: TextStyle(fontSize: 17)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // delete patient functionality
+                                  deletePatient(context);
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Delete',
+                                    style: TextStyle(fontSize: 17)),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     icon: const Icon(Icons.delete),
                     label: const Text('Delete', style: TextStyle(fontSize: 17)),
